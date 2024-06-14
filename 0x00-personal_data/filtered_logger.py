@@ -23,6 +23,20 @@ class RedactingFormatter(logging.Formatter):
                             super().format(record), self.SEPARATOR)
 
 
+PII_FIELDS = ("name", "email", "password", "ssn", "phone")
+
+
+def get_logger() -> logging.Logger:
+    """returns a logging.Logger object"""
+    logger = logging.getLogger("user_data")
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+    handler = logging.StreamHandler()
+    formatter = RedactingFormatter(list(PII_FIELDS))
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    return logger
+
 def filter_datum(fields: List[str], redaction: str, message: str,
                  separator: str) -> str:
     """returns the log message obfuscated"""
