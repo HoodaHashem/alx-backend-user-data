@@ -61,3 +61,28 @@ def get_db() -> mysql.connector.connection.MYSQLConnection:
         database=os.getenv('PERSONAL_DATA_DB_NAME')
     )
     return db_connect
+
+def main() -> None:
+    """ Obtain database connection using get_db
+    retrieve all role in the users table and display
+    each row under a filtered format
+    """
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users;")
+
+    headers = [field[0] for field in cursor.description]
+    logger = get_logger()
+
+    for row in cursor:
+        info_answer = ''
+        for f, p in zip(row, headers):
+            info_answer += f'{p}={(f)}; '
+        logger.info(info_answer)
+
+    cursor.close()
+    db.close()
+
+
+if __name__ == '__main__':
+    main()
