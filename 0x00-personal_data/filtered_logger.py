@@ -7,7 +7,7 @@ import logging
 
 
 class RedactingFormatter(logging.Formatter):
-    """ 
+    """
     Redacting Formatter class
     """
 
