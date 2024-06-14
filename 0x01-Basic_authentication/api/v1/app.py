@@ -35,7 +35,6 @@ if AUTH_TYPE == "auth":
 #     AUTH_TYPE = None
 
 
-
 @app.errorhandler(404)
 def not_found(error) -> str:
     """ Not found handler
@@ -63,13 +62,15 @@ def before_request_func():
     """
     if auth is None:
         return
-    excluded_paths = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
+    excluded_paths = ['/api/v1/status/', '/api/v1/unauthorized/',
+                      '/api/v1/forbidden/']
     if not auth.require_auth(request.path, excluded_paths):
         return
     if not auth.authorization_header(request):
         abort(401)
     if not auth.current_user(request):
         abort(403)
+
 
 if __name__ == "__main__":
     host = getenv("API_HOST", "0.0.0.0")
